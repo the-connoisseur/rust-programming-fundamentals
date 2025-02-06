@@ -68,10 +68,10 @@ fn main() {
             }
         };
 
-        println!("Enter FROM temperature unit:[Cc/Ff/Kk]");
         let from_unit: TemperatureUnit;
         // This loop re-prompts the user for a from unit until entered correctly.
         'from_unit: loop {
+            println!("Enter FROM temperature unit:[Cc/Ff/Kk]");
             let mut from_unit_str = String::new();
             io::stdin()
                 .read_line(&mut from_unit_str)
@@ -87,10 +87,10 @@ fn main() {
             break 'from_unit;
         }
 
-        println!("Enter TO temperature unit:[Cc/Ff/Kk]");
         let to_unit: TemperatureUnit;
         // This loop re-prompts the user for a to unit until entered correctly.
         'to_unit: loop {
+            println!("Enter TO temperature unit:[Cc/Ff/Kk]");
             let mut to_unit_str = String::new();
             io::stdin()
                 .read_line(&mut to_unit_str)
