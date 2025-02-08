@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "temperature_converter"
-path = "src/bin/temperature_converter.rs"
+name = "a1_temperature_converter"
+path = "src/bin/a1_temperature_converter.rs"
 
 [dependencies]
