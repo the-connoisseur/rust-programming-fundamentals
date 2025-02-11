@@ -13,7 +13,7 @@ fn main() {
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read user input.");
-        if input.trim() == "E" {
+        if input.trim().to_lowercase() == "e" {
             println!("Exiting the palindrome checker program.");
             break 'main;
         }
