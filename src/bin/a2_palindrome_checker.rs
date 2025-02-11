@@ -1,4 +1,4 @@
-use std::io::{self, Write};
+use std::io;
 
 fn main() {
     let palindrome_checkers: [fn(s: &str) -> bool; 2] = [is_pal_loop, is_pal_recursion];
@@ -8,7 +8,6 @@ fn main() {
     // The main loop keeps the program running until the user chooses to exit.
     'main: loop {
         println!("Enter a string, or E (to exit)");
-        io::stdout().flush().unwrap();
 
         let mut input = String::new();
         io::stdin()
@@ -16,7 +15,6 @@ fn main() {
             .expect("Failed to read user input.");
         if input.trim() == "E" {
             println!("Exiting the palindrome checker program.");
-            io::stdout().flush().unwrap();
             break 'main;
         }
 
@@ -25,39 +23,36 @@ fn main() {
             input.pop();
         }
 
-        // Remove the non-alphanumeric characters from the input string. Preserve the whitespace as
-        // we may need it to discern the individual words.
-        let alphanum_input: String = remove_non_alphanumeric(input.as_str());
-        if alphanum_input.is_empty() {
+        // There is no point in continuing if there are no alphanumeric characters.
+        let sanitized_input = remove_non_alphanumeric(input.as_str());
+        if sanitized_input.is_empty() {
             println!(
                 "[WARNING]: string \"{}\" does not have any alphanumeric characters, ignored.",
                 input
             );
-            io::stdout().flush().unwrap();
             continue 'main;
         }
-
-        // Convert all characters to lower case, as we want to treat it as case insensitive.
-        let alphanum_input: String = alphanum_input.to_lowercase();
 
         // Check for palindromes with each of our implementations.
         for func in palindrome_checkers.iter() {
             // First check if the whole sentence is a palindrome.
-            if func(alphanum_input.as_str()) {
+            if func(&sanitized_input) {
                 println!("String \"{}\" is a palindrome.", input);
-                io::stdout().flush().unwrap();
             } else {
                 // If it isn't, check each word.
-                let words: Vec<&str> = alphanum_input.split_whitespace().collect();
-                let mut pal_words: Vec<&str> = vec![];
+                let words: Vec<&str> = input.split_whitespace().collect();
+                let mut pal_words: Vec<String> = vec![];
                 for word in words {
-                    if func(word) {
-                        pal_words.push(word);
+                    let sanitized_word = remove_non_alphanumeric(word);
+                    if sanitized_word.is_empty() {
+                        continue;
+                    }
+                    if func(&sanitized_word) {
+                        pal_words.push(sanitized_word);
                     }
                 }
                 if pal_words.is_empty() {
                     println!("String \"{}\" is NOT a palindrome.", input);
-                    io::stdout().flush().unwrap();
                 } else {
                     println!("String \"{}\" is NOT a palindrome, but has the following palindrome item(s) in it:", input);
                     let mut first: bool = true;
@@ -70,7 +65,6 @@ fn main() {
                         }
                     }
                     println!(".");
-                    io::stdout().flush().unwrap();
                 }
             }
         }
@@ -78,18 +72,20 @@ fn main() {
     }
 }
 
-// Returns true if the &char is an ASCII alphanumeric or ASCII whitespace character.
-fn is_alphanumeric_or_whitespace(c: &char) -> bool {
-    c.is_ascii_alphanumeric() || c.is_ascii_whitespace()
+// Returns true if the &char is an ASCII alphanumeric character.
+fn is_alphanumeric(c: &char) -> bool {
+    c.is_ascii_alphanumeric()
 }
 
-// Returns
+// Returns a sanitized input string with non-alphanumeric characters removed.
 fn remove_non_alphanumeric(s: &str) -> String {
-    s.chars().filter(is_alphanumeric_or_whitespace).collect()
+    s.chars().filter(is_alphanumeric).collect()
 }
 
+// Checks if the input string is a palindrome by iterating over its characters.
 fn is_pal_loop(s: &str) -> bool {
-    let chars = s.chars();
+    let lower_s = s.to_lowercase();
+    let chars = lower_s.chars();
     let mut reverse_chars = chars.clone().rev();
     for c in chars {
         if c != reverse_chars.next().unwrap() {
@@ -99,13 +95,16 @@ fn is_pal_loop(s: &str) -> bool {
     true
 }
 
+// Checks if the input string is a palindrome by recursively comparing the first and last
+// characters and then subsampling the string.
 fn is_pal_recursion(s: &str) -> bool {
-    let length = s.chars().count();
+    let lower_s = s.to_lowercase();
+    let length = lower_s.chars().count();
     if length < 2 {
         return true;
     }
-    if s.chars().next() == s.chars().last() {
-        return is_pal_recursion(&s[1..length - 1]);
+    if lower_s.chars().next() == lower_s.chars().last() {
+        return is_pal_recursion(&lower_s[1..length - 1]);
     }
     false
 }
