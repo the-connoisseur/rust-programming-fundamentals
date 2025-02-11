@@ -82,7 +82,8 @@ fn remove_non_alphanumeric(s: &str) -> String {
     s.chars().filter(is_alphanumeric).collect()
 }
 
-// Checks if the input string is a palindrome by iterating over its characters.
+// Checks if the input string is a palindrome by iterating over its characters from both directions
+// simultaneously and comparing them.
 fn is_pal_loop(s: &str) -> bool {
     let lower_s = s.to_lowercase();
     let chars = lower_s.chars();
