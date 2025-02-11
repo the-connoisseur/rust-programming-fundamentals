@@ -7,4 +7,8 @@ edition = "2021"
 name = "a1_temperature_converter"
 path = "src/bin/a1_temperature_converter.rs"
 
+[[bin]]
+name = "a2_palindrome_checker"
+path = "src/bin/a2_palindrome_checker.rs"
+
 [dependencies]
