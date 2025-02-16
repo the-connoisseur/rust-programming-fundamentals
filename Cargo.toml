@@ -11,4 +11,8 @@ path = "src/bin/a1_temperature_converter.rs"
 name = "a2_palindrome_checker"
 path = "src/bin/a2_palindrome_checker.rs"
 
+[[bin]]
+name = "a3_word_frequency_finder"
+path = "src/bin/a3_word_frequency_finder.rs"
+
 [dependencies]
