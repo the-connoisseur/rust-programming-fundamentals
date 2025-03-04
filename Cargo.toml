@@ -15,4 +15,10 @@ path = "src/bin/a2_palindrome_checker.rs"
 name = "a3_word_frequency_finder"
 path = "src/bin/a3_word_frequency_finder.rs"
 
+[[bin]]
+name = "cwl"
+path = "src/bin/cwl.rs"
+
 [dependencies]
+clap = { version = "4.5.31" }
+walkdir = "2"
