@@ -20,5 +20,6 @@ name = "cwl"
 path = "src/bin/cwl.rs"
 
 [dependencies]
-clap = { version = "4.5.31" }
+chrono = "0.4"
+clap = { version = "4.5.31", features = ["derive"] }
 walkdir = "2"
